@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option csharp_namespace = "CacheManager";
+
+package cachemanager;
+
+// The CacheManager service definition.
+service CacheManagerService {
+  // Inserts a generic object into the cache.
+  rpc InsertIntoCache (InsertRequest) returns (InsertResponse);
+}
+
+// The request message containing the key and the serialized object.
+message InsertRequest {
+  string key = 1;
+  bytes value = 2;
+}
+
+// The response message indicating success or failure.
+message InsertResponse {
+  bool success = 1;
+  string message = 2;
+}
