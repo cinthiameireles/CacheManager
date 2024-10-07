@@ -8,6 +8,8 @@ package cachemanager;
 service CacheManagerService {
   // Inserts a generic object into the cache.
   rpc InsertIntoCache (InsertRequest) returns (InsertResponse);
+
+  rpc GetValueFromCache (GetValueRequest) returns (GetValueResponse);
 }
 
 // The request message containing the key and the serialized object.
@@ -20,4 +22,14 @@ message InsertRequest {
 message InsertResponse {
   bool success = 1;
   string message = 2;
+}
+
+
+message GetValueRequest {
+  string key = 1; // A chave para buscar no Redis
+}
+
+message GetValueResponse {
+  bool success = 1; // O valor retornado do Redis
+  bytes value = 2;
 }

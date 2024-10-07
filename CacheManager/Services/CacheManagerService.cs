@@ -57,5 +57,22 @@ namespace CacheManager.Services
                 };
             }
         }
+    
+        public override async Task<GetValueResponse> GetValueFromCache(GetValueRequest request, ServerCallContext context)
+        {
+            var db = _redis.GetDatabase();
+    
+            // Obtém o valor associado à chave no Redis
+            var value = await db.StringGetAsync(request.Key);
+
+            if (value.IsNullOrEmpty)
+            {
+                // Se o valor não for encontrado, retorna um array de bytes vazio
+                return new GetValueResponse { Value = Google.Protobuf.ByteString.Empty, Success = false };
+            }
+
+            // Converte o RedisValue para bytes e cria a resposta
+            return new GetValueResponse { Value = Google.Protobuf.ByteString.CopyFromUtf8(value), Success = true };
+        }
     }
 }
