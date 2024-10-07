@@ -25,10 +25,10 @@ namespace CacheManager.Services
                 var db = _redis.GetDatabase();
 
                 // Deserialize the bytes into a JSON string
-                string jsonString = System.Text.Encoding.UTF8.GetString(request.Value.ToByteArray());
+                byte[] bytes = request.Value.ToByteArray();
 
                 // Store in Redis
-                bool setResult = await db.StringSetAsync(request.Key, jsonString);
+                bool setResult = await db.StringSetAsync(request.Key, bytes);
 
                 if (setResult)
                 {
@@ -72,7 +72,7 @@ namespace CacheManager.Services
             }
 
             // Converte o RedisValue para bytes e cria a resposta
-            return new GetValueResponse { Value = Google.Protobuf.ByteString.CopyFromUtf8(value), Success = true };
+            return new GetValueResponse { Value = Google.Protobuf.ByteString.CopyFrom(value), Success = true };
         }
     }
 }
