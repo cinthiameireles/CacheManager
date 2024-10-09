@@ -4,8 +4,18 @@ using CacheManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddGrpc();
+// Configurar limites de tamanho de mensagens no Kestrel (opcional, dependendo do servidor)
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = null; //50 * 1024 * 1024; // Exemplo: 50 MB
+});
+
+// Configurar limites de tamanho de mensagens gRPC
+builder.Services.AddGrpc(options =>
+{
+    options.MaxReceiveMessageSize = null; //50 * 1024 * 1024; // Exemplo: 50 MB
+    options.MaxSendMessageSize = null; //50 * 1024 * 1024;    // Exemplo: 50 MB
+});
 
 // Configure Redis connection
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
